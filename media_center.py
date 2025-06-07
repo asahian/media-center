@@ -20,6 +20,9 @@ class MainWindow(QMainWindow):
         super_main_v_layout.setContentsMargins(0,0,0,0) # Use full window space
         super_main_v_layout.setSpacing(0)
 
+        # --- Media Player Setup (MUST be before UI elements that use it) ---
+        self.player = QMediaPlayer(None, QMediaPlayer.VideoSurface)
+        # self.video_widget is created later, output set after main_h_layout
 
         # --- Category List (Horizontal Top Bar) ---
         self.category_list_widget = QListWidget()
@@ -199,9 +202,7 @@ class MainWindow(QMainWindow):
             }
         """)
 
-        # --- Media Player Setup ---
-        self.player = QMediaPlayer(None, QMediaPlayer.VideoSurface)
-        self.player.setVideoOutput(self.video_widget)
+        # --- Media Player Signal Connections (after player and methods are defined) ---
         self.player.error.connect(self.handle_player_error)
         self.player.stateChanged.connect(self.update_playback_controls_state)
         self.player.mediaStatusChanged.connect(self.handle_media_status_changed)
